@@ -1,0 +1,952 @@
+---
+title: '#tidytuesday: tour de france winners 🚴'
+author: Maia Pelletier
+date: '2020-04-07'
+slug: tidytuesday-tour-de-france-winners
+categories:
+  - tidytuesday
+  - r
+tags:
+  - tidytuesday
+  - data exploration
+  - r
+---
+
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+
+
+<p>For this week’s <strong>#TidyTuesday</strong>, I decided that I wanted to do an in-depth exploration of the this week’s dataset of Tour de France winners, and write a blog post about how I generally go about my data exploration for Tidy Tuesday.</p>
+<p>However, I desperately need to preface this blog post: I went into this week’s <strong>#TidyTuesday</strong> excited to learn more about a sport I know almost nothing about. I’ve come out of it completely <em>obsessed</em> with the drama and insanity that is the history of the Tour de France.</p>
+<p>I’m serious. If you know nothing about the Tour de France (like me, and probably most people), please go take a look at the <a href="https://en.wikipedia.org/wiki/Tour_de_France">Tour de France wikipedia page</a>. I will be peppering in some of my favourite facts that I learned about the race and its history throughout this blog post but here are some of my favourites:</p>
+<ul>
+<li>The Tour de France originated as a publicity stunt for a failing sports newspaper (<em>L’Auto</em>) in France
+<ul>
+<li>Apparently, setting up bike races to promote newspaper sales was a common thing in France at the time. <a href="https://en.wikipedia.org/wiki/Tour_de_France">No I am not kidding.</a></li>
+</ul></li>
+<li><em>L’Auto</em> was actually a rival newspaper of the most popular sport paper in France at the time: <em>Le Vélo</em>. <em>L’Auto</em> hoped that this crazy long bike race might put <em>Le Vélo</em> out of business.
+<ul>
+<li>The reason they were rivals? A disagreement over whether or not an infamous French officer sold military secrets to the Germans. (Was that not your first guess?)</li>
+</ul></li>
+<li>Competing in the Tour de France during its origins was <em>crazy dangerous</em>. Not only did the riders cycle on <strong>dirt roads with single-gear bikes</strong>, the race was almost cancelled after its first year because <strong>fans were constantly assaulting cyclists</strong> to give their favourite the lead.</li>
+</ul>
+<p>So there’s your useless trivia for the week. I kind of wish this was a whole blog post about just how crazy the Tour de France is but the context makes the data as a whole more fun too.</p>
+<div id="data-exploration" class="section level3">
+<h3>Data Exploration</h3>
+<p>Just a quick heads up: the full code for this week’s <strong>#TidyTuesday</strong> can be found on my (github)[<a href="https://github.com/MaiaPelletier/tidytuesday" class="uri">https://github.com/MaiaPelletier/tidytuesday</a>].</p>
+<p>First things first, we have to load some useful packages, get the data, and see what it looks like.</p>
+<pre class="r"><code># Load libraries
+library(tidyverse)    # All the fun tidy functions!
+library(skimr)        # Gives an awesome data summary for exploration  
+library(lubridate)    # For working with dates
+
+# Read data
+tdf_winners &lt;- read_csv(&#39;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-04-07/tdf_winners.csv&#39;)
+tdf_winners</code></pre>
+<pre><code>## # A tibble: 106 x 19
+##    edition start_date winner_name winner_team distance time_overall time_margin
+##      &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;
+##  1       1 1903-07-01 Maurice Ga~ La Françai~     2428         94.6        2.99
+##  2       2 1904-07-02 Henri Corn~ Conte           2428         96.1        2.27
+##  3       3 1905-07-09 Louis Trou~ Peugeot–Wo~     2994         NA         NA   
+##  4       4 1906-07-04 René Potti~ Peugeot–Wo~     4637         NA         NA   
+##  5       5 1907-07-08 Lucien Pet~ Peugeot–Wo~     4488         NA         NA   
+##  6       6 1908-07-13 Lucien Pet~ Peugeot–Wo~     4497         NA         NA   
+##  7       7 1909-07-05 François F~ Alcyon–Dun~     4498         NA         NA   
+##  8       8 1910-07-01 Octave Lap~ Alcyon–Dun~     4734         NA         NA   
+##  9       9 1911-07-02 Gustave Ga~ Alcyon–Dun~     5343         NA         NA   
+## 10      10 1912-06-30 Odile Defr~ Alcyon–Dun~     5289         NA         NA   
+## # ... with 96 more rows, and 12 more variables: stage_wins &lt;dbl&gt;,
+## #   stages_led &lt;dbl&gt;, height &lt;dbl&gt;, weight &lt;dbl&gt;, age &lt;dbl&gt;, born &lt;date&gt;,
+## #   died &lt;date&gt;, full_name &lt;chr&gt;, nickname &lt;chr&gt;, birth_town &lt;chr&gt;,
+## #   birth_country &lt;chr&gt;, nationality &lt;chr&gt;</code></pre>
+<p>When I’m exploring data, sometimes I have a really hard time knowing where to start. My favourite thing to do is start at the same spot everytime and just do a simple <code>glimpse</code> and <code>skim</code> of the data.</p>
+<pre class="r"><code>glimpse(tdf_winners)</code></pre>
+<pre><code>## Observations: 106
+## Variables: 19
+## $ edition       &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16...
+## $ start_date    &lt;date&gt; 1903-07-01, 1904-07-02, 1905-07-09, 1906-07-04, 1907...
+## $ winner_name   &lt;chr&gt; &quot;Maurice Garin&quot;, &quot;Henri Cornet&quot;, &quot;Louis Trousselier&quot;,...
+## $ winner_team   &lt;chr&gt; &quot;La Française&quot;, &quot;Conte&quot;, &quot;Peugeot–Wolber&quot;, &quot;Peugeot–W...
+## $ distance      &lt;dbl&gt; 2428, 2428, 2994, 4637, 4488, 4497, 4498, 4734, 5343,...
+## $ time_overall  &lt;dbl&gt; 94.55389, 96.09861, NA, NA, NA, NA, NA, NA, NA, NA, 1...
+## $ time_margin   &lt;dbl&gt; 2.98916667, 2.27055556, NA, NA, NA, NA, NA, NA, NA, N...
+## $ stage_wins    &lt;dbl&gt; 3, 1, 5, 5, 2, 5, 6, 4, 2, 3, 1, 1, 1, 4, 2, 0, 3, 4,...
+## $ stages_led    &lt;dbl&gt; 6, 3, 10, 12, 5, 13, 13, 3, 13, 13, 8, 15, 2, 14, 14,...
+## $ height        &lt;dbl&gt; 1.62, NA, NA, NA, NA, NA, 1.78, NA, NA, NA, NA, NA, N...
+## $ weight        &lt;dbl&gt; 60, NA, NA, NA, NA, NA, 88, NA, NA, NA, NA, NA, NA, N...
+## $ age           &lt;dbl&gt; 32, 19, 24, 27, 24, 25, 22, 22, 26, 23, 23, 24, 33, 3...
+## $ born          &lt;date&gt; 1871-03-03, 1884-08-04, 1881-06-29, 1879-06-05, 1882...
+## $ died          &lt;date&gt; 1957-02-19, 1941-03-18, 1939-04-24, 1907-01-25, 1917...
+## $ full_name     &lt;chr&gt; NA, NA, NA, NA, &quot;Lucien Georges Mazan&quot;, &quot;Lucien Georg...
+## $ nickname      &lt;chr&gt; &quot;The Little Chimney-sweep&quot;, &quot;Le rigolo (The joker)&quot;, ...
+## $ birth_town    &lt;chr&gt; &quot;Arvier&quot;, &quot;Desvres&quot;, &quot;Paris&quot;, &quot;Moret-sur-Loing&quot;, &quot;Ple...
+## $ birth_country &lt;chr&gt; &quot;Italy&quot;, &quot;France&quot;, &quot;France&quot;, &quot;France&quot;, &quot;France&quot;, &quot;Fra...
+## $ nationality   &lt;chr&gt; &quot; France&quot;, &quot; France&quot;, &quot; France&quot;, &quot; France&quot;, &quot; France&quot;...</code></pre>
+<p>In this <code>glimpse</code> we can see the dimensions and the general structure of the data. This is not a very big dataset: we have 106 rows (one row for each edition of the Tour de France) and 19 columns with various information about each Tour de France winner. We can start to see that there are quite a few NA values popping up in this glimpse. I assume this is because the Tour de France originated in 1903 and there’s likely no reliable record of the winners’ heights, weights, etc. So this is not too problematic in terms of the data’s trustworthiness.</p>
+<pre class="r"><code>skim(tdf_winners)</code></pre>
+<table style='width: auto;'
+        class='table table-condensed'>
+<caption>
+<span id="tab:skim">Table 1: </span>Data summary
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Name
+</td>
+<td style="text-align:left;">
+tdf_winners
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Number of rows
+</td>
+<td style="text-align:left;">
+106
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Number of columns
+</td>
+<td style="text-align:left;">
+19
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+_______________________
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Column type frequency:
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+character
+</td>
+<td style="text-align:left;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Date
+</td>
+<td style="text-align:left;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+________________________
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Group variables
+</td>
+<td style="text-align:left;">
+None
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+skim_variable
+</th>
+<th style="text-align:right;">
+n_missing
+</th>
+<th style="text-align:right;">
+complete_rate
+</th>
+<th style="text-align:right;">
+min
+</th>
+<th style="text-align:right;">
+max
+</th>
+<th style="text-align:right;">
+empty
+</th>
+<th style="text-align:right;">
+n_unique
+</th>
+<th style="text-align:right;">
+whitespace
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+winner_name
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+63
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+winner_team
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+33
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+48
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+full_name
+</td>
+<td style="text-align:right;">
+60
+</td>
+<td style="text-align:right;">
+0.43
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+33
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nickname
+</td>
+<td style="text-align:right;">
+32
+</td>
+<td style="text-align:right;">
+0.70
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+95
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+37
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+birth_town
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+28
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+58
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+birth_country
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nationality
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+106
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: Date</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+skim_variable
+</th>
+<th style="text-align:right;">
+n_missing
+</th>
+<th style="text-align:right;">
+complete_rate
+</th>
+<th style="text-align:left;">
+min
+</th>
+<th style="text-align:left;">
+max
+</th>
+<th style="text-align:left;">
+median
+</th>
+<th style="text-align:right;">
+n_unique
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+start_date
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:left;">
+1903-07-01
+</td>
+<td style="text-align:left;">
+2019-07-06
+</td>
+<td style="text-align:left;">
+1966-12-24
+</td>
+<td style="text-align:right;">
+106
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+born
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:left;">
+1871-03-03
+</td>
+<td style="text-align:left;">
+1997-01-13
+</td>
+<td style="text-align:left;">
+1940-12-27
+</td>
+<td style="text-align:right;">
+63
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+died
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:right;">
+0.53
+</td>
+<td style="text-align:left;">
+1907-01-25
+</td>
+<td style="text-align:left;">
+2019-08-16
+</td>
+<td style="text-align:left;">
+1980-04-10
+</td>
+<td style="text-align:right;">
+38
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+skim_variable
+</th>
+<th style="text-align:right;">
+n_missing
+</th>
+<th style="text-align:right;">
+complete_rate
+</th>
+<th style="text-align:right;">
+mean
+</th>
+<th style="text-align:right;">
+sd
+</th>
+<th style="text-align:right;">
+p0
+</th>
+<th style="text-align:right;">
+p25
+</th>
+<th style="text-align:right;">
+p50
+</th>
+<th style="text-align:right;">
+p75
+</th>
+<th style="text-align:right;">
+p100
+</th>
+<th style="text-align:left;">
+hist
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+edition
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+53.50
+</td>
+<td style="text-align:right;">
+30.74
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+27.25
+</td>
+<td style="text-align:right;">
+53.50
+</td>
+<td style="text-align:right;">
+79.75
+</td>
+<td style="text-align:right;">
+106.00
+</td>
+<td style="text-align:left;">
+▇▇▇▇▇
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+distance
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+4212.06
+</td>
+<td style="text-align:right;">
+704.28
+</td>
+<td style="text-align:right;">
+2428.00
+</td>
+<td style="text-align:right;">
+3657.88
+</td>
+<td style="text-align:right;">
+4155.50
+</td>
+<td style="text-align:right;">
+4652.50
+</td>
+<td style="text-align:right;">
+5745.00
+</td>
+<td style="text-align:left;">
+▁▇▇▆▃
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+time_overall
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+0.92
+</td>
+<td style="text-align:right;">
+125.75
+</td>
+<td style="text-align:right;">
+41.56
+</td>
+<td style="text-align:right;">
+82.09
+</td>
+<td style="text-align:right;">
+92.60
+</td>
+<td style="text-align:right;">
+115.03
+</td>
+<td style="text-align:right;">
+142.68
+</td>
+<td style="text-align:right;">
+238.74
+</td>
+<td style="text-align:left;">
+▇▅▂▁▂
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+time_margin
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+0.92
+</td>
+<td style="text-align:right;">
+0.27
+</td>
+<td style="text-align:right;">
+0.48
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+0.10
+</td>
+<td style="text-align:right;">
+0.25
+</td>
+<td style="text-align:right;">
+2.99
+</td>
+<td style="text-align:left;">
+▇▁▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stage_wins
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+2.74
+</td>
+<td style="text-align:right;">
+1.84
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+2.00
+</td>
+<td style="text-align:right;">
+4.00
+</td>
+<td style="text-align:right;">
+8.00
+</td>
+<td style="text-align:left;">
+▆▇▃▂▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stages_led
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+10.79
+</td>
+<td style="text-align:right;">
+5.31
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+6.25
+</td>
+<td style="text-align:right;">
+12.00
+</td>
+<td style="text-align:right;">
+14.00
+</td>
+<td style="text-align:right;">
+22.00
+</td>
+<td style="text-align:left;">
+▆▇▇▇▃
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+height
+</td>
+<td style="text-align:right;">
+40
+</td>
+<td style="text-align:right;">
+0.62
+</td>
+<td style="text-align:right;">
+1.78
+</td>
+<td style="text-align:right;">
+0.06
+</td>
+<td style="text-align:right;">
+1.61
+</td>
+<td style="text-align:right;">
+1.74
+</td>
+<td style="text-align:right;">
+1.77
+</td>
+<td style="text-align:right;">
+1.82
+</td>
+<td style="text-align:right;">
+1.90
+</td>
+<td style="text-align:left;">
+▁▁▇▃▂
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+weight
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:right;">
+0.63
+</td>
+<td style="text-align:right;">
+69.25
+</td>
+<td style="text-align:right;">
+6.59
+</td>
+<td style="text-align:right;">
+52.00
+</td>
+<td style="text-align:right;">
+64.50
+</td>
+<td style="text-align:right;">
+69.00
+</td>
+<td style="text-align:right;">
+74.00
+</td>
+<td style="text-align:right;">
+88.00
+</td>
+<td style="text-align:left;">
+▁▆▇▇▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+27.72
+</td>
+<td style="text-align:right;">
+3.35
+</td>
+<td style="text-align:right;">
+19.00
+</td>
+<td style="text-align:right;">
+26.00
+</td>
+<td style="text-align:right;">
+28.00
+</td>
+<td style="text-align:right;">
+30.00
+</td>
+<td style="text-align:right;">
+36.00
+</td>
+<td style="text-align:left;">
+▁▃▇▃▂
+</td>
+</tr>
+</tbody>
+</table>
+<p>I found <code>skim</code> to be super helpful (and interesting) for this particular dataset, giving us lots of ideas for things that we can explore further.</p>
+<p>Some things that I noticed from looking at the <code>skim</code> output:</p>
+<ul>
+<li>there’s been 106 Tour de France editions but only 63 unique individual winners<br />
+</li>
+<li><code>full_name</code> has more missing values than <code>nickname</code></li>
+<li>in 106 editions, there have only been winners from 14 unique nationalities<br />
+</li>
+<li>the distance of the tour varies quite a bit. I know that the route is different from edition to edition but a range of 5000km seems dramatic.</li>
+</ul>
+<p>This is a great starting point for exploration! Let’s dig into it a little more ⛏️.</p>
+</div>
+<div id="racers-with-multiple-tdf-wins" class="section level3">
+<h3>Racers with multiple TDF wins</h3>
+<p>We noticed that there were only 63 unique values for the <code>winner_name</code> variable. That means that there must be cyclists who have won multiple Tour de France editions.</p>
+<pre class="r"><code>tdf_winners %&gt;%
+  count(winner_name, sort = TRUE) %&gt;%
+  filter(n &gt; 1) %&gt;%
+  summarise(
+    num_of_racers = n_distinct(winner_name), 
+    num_of_wins = sum(n)
+    ) %&gt;%
+  kable() %&gt;%
+  kable_styling()</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+num_of_racers
+</th>
+<th style="text-align:right;">
+num_of_wins
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+64
+</td>
+</tr>
+</tbody>
+</table>
+<p>So half of the editions in all Tour de France history were won by just 21 cyclists! That’s a pretty cool. Who were these cyclists and how many times did they win individually?</p>
+<pre class="r"><code>tdf_winners %&gt;%
+  count(winner_name, name = &#39;num_of_wins&#39;) %&gt;%
+  filter(num_of_wins &gt; 1) %&gt;%
+  ggplot(aes(reorder(winner_name, num_of_wins), num_of_wins)) +
+  geom_col(fill = pal[1],
+           width = 0.6,
+           alpha = 0.8) +
+  labs(x = NULL, y = &#39;Tour de France wins&#39;) +
+  coord_flip()</code></pre>
+<p><img src="/post/2020-04-07-tidytuesday-tour-de-france-winners_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>Personally, I am only familiar with the top guy (as I’m sure most people are), but it’s pretty cool to see just how many cyclists that were not just able to win this race once, but <em>more than once</em>. That’s an amazing feat of human strength and endurance (and steroids…? :eyes:).</p>
+<p>In my wikipedia spiral, I learned that Eddy Merckx was a pretty big deal in the 70s. He was the first “superstar” of the Tour de France and his aggressive style earned him the nickname “The Cannibal”. <em>(Side note: Cycling is way more intense than I ever could have imagined)</em></p>
+</div>
+<div id="nations-that-have-a-tour-de-france-winner" class="section level3">
+<h3>Nations that have a Tour de France winner</h3>
+<p>Another thing we noticed was that only 14 countries can claim competitors who have won an edition of the Tour de France.</p>
+<pre class="r"><code>tdf_winners %&gt;%
+  count(nationality, sort = TRUE) %&gt;%
+  ggplot(aes(reorder(nationality, n), n)) +
+  geom_col(fill = pal[2], alpha = 0.8, width = 0.6) +
+  labs(x = NULL, y = &#39;Tour de France wins&#39;) +
+  coord_flip()</code></pre>
+<p><img src="/post/2020-04-07-tidytuesday-tour-de-france-winners_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>It’s not surprising that France has won so many editions of the Tour. The race originated there and although it was open for global competitors for most of its editions, it was the most popular in France (and neighbouring countries) for most of the 20th century. This meant that there were more cyclists who were racing from western European countries than anywhere else. In fact the only countries who have won outside of “Europe” (<em>sorry Brexit</em>) are: <strong>USA</strong>, <strong>Colombia</strong>, and <strong>Australia</strong>.</p>
+</div>
+<div id="race-distances" class="section level3">
+<h3>Race distances</h3>
+<p>We noticed before the huge variability of the race distances. To me, this didn’t make a lot of sense. I expected a bit of variability since the route changes from edition to edition but variance of the range of distances travelled over the years is <strong>very wide</strong>.</p>
+<pre class="r"><code>ggplot(tdf_winners, aes(distance)) +
+  geom_histogram(fill = pal[3], binwidth = 200, alpha = 0.8) +
+  labs(x = &#39;Race distance (km)&#39;, y = &#39;Frequency&#39;)</code></pre>
+<p><img src="/post/2020-04-07-tidytuesday-tour-de-france-winners_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>How can the race distance differ from low 3000s km to almost 6000km? After looking into the history, I decided to plot the distances raced over the years.</p>
+<pre class="r"><code>tdf_winners %&gt;%
+  mutate(start_year = year(start_date)) %&gt;%
+  ggplot(aes(start_year, distance)) +
+  geom_line(col = pal[4]) +
+  geom_point(data = min_max_dist,
+             aes(start_year, distance),
+             col = &#39;grey35&#39;) +
+  geom_text(data = min_max_dist,
+            aes(label = start_year),
+            size = 3,
+            color = &#39;grey25&#39;,
+            hjust = -0.25,
+            family = &#39;Arial Narrow&#39;) +
+  labs(x = &#39;Race year&#39;, y = &#39;Race distance (km)&#39;)</code></pre>
+<p><img src="/post/2020-04-07-tidytuesday-tour-de-france-winners_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>We can see that since the race’s origins, the race distance seems to be on a bit of a decline. Not considering the first year of the race in 1903, the minimum distance raced was 3272km (<em>which is still crazy</em>). The maximum distance raced clocks in at a whopping 5745km during the 1926 edition of the Tour (<em>which is actual insanity???</em>). If you’re wondering why the distances are so insanely high during the early 1900s, it lies (once again) within the history of the Tour de France.</p>
+<p>The original organizer of the race was a strict traditionalist and wanted the race to be the <strong>ultimate test of endurance</strong>, stating that the ideal race had only <strong>ONE</strong> rider making it to the finish line (omg). He also demanded that riders mend their bicycles <em>without</em> help and that they use the <em>same bicycle from start to end</em>. Exchanging a damaged bicycle for another was not allowed under his rules (OMG).</p>
+<p>So, in conclusion… The Tour de France is crazy.</p>
+<p>Actually though, I haven’t even touched the doping scandals that have plagued the race since the 1960s or the fact that the race was never really standardized until the 80s <em>or</em> the fact that it remained a newspaper feud for 40 years after its origin. Everything about the race is wild.</p>
+<p>This is an awesome <strong>#TidyTuesday</strong> dataset and there’s still so much more to explore past what I’ve looked at here. I think this dataset is a great example of how context (or <em>domain expertise</em> as it’s called in the data science world) is pretty important to understanding your data (and a great illustration of the joy of learning new things).</p>
+<p>Any question/comments/fun facts about the Tour de France can be directed to <a href="https://twitter.com/MaiaPelleter">my twitter</a>. Reminder that you can find my full code for this week’s Tidy Tuesday on <a href="https://github.com/MaiaPelletier">github</a>. Happy <strong>#TidyTuesday</strong> everyone!</p>
+</div>

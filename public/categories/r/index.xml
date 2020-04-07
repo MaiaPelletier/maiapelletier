@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>R on Maia Pelletier</title>
+    <title>r on Maia Pelletier</title>
     <link>/categories/r/</link>
-    <description>Recent content in R on Maia Pelletier</description>
+    <description>Recent content in r on Maia Pelletier</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 23 Jul 2015 21:13:14 -0500</lastBuildDate>
+    <lastBuildDate>Tue, 07 Apr 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Hello R Markdown</title>
-      <link>/post/2015-07-23-r-rmarkdown/</link>
-      <pubDate>Thu, 23 Jul 2015 21:13:14 -0500</pubDate>
+      <title>#tidytuesday: tour de france winners 🚴</title>
+      <link>/post/tidytuesday-tour-de-france-winners/</link>
+      <pubDate>Tue, 07 Apr 2020 00:00:00 +0000</pubDate>
       
-      <guid>/post/2015-07-23-r-rmarkdown/</guid>
-      <description>R MarkdownThis is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
-You can embed an R code chunk like this:
-summary(cars)## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</description>
+      <guid>/post/tidytuesday-tour-de-france-winners/</guid>
+      <description>For this week’s #TidyTuesday, I decided that I wanted to do an in-depth exploration of the this week’s dataset of Tour de France winners, and write a blog post about how I generally go about my data exploration for Tidy Tuesday.
+However, I desperately need to preface this blog post: I went into this week’s #TidyTuesday excited to learn more about a sport I know almost nothing about. I’ve come out of it completely obsessed with the drama and insanity that is the history of the Tour de France.</description>
     </item>
     
   </channel>

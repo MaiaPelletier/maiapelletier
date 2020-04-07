@@ -12,11 +12,38 @@
     
     
     <item>
+      <title>data exploration</title>
+      <link>/tags/data-exploration/</link>
+      <pubDate>Tue, 07 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/data-exploration/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>personal</title>
       <link>/tags/personal/</link>
       <pubDate>Tue, 07 Apr 2020 00:00:00 +0000</pubDate>
       
       <guid>/tags/personal/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>r</title>
+      <link>/tags/r/</link>
+      <pubDate>Tue, 07 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>tidytuesday</title>
+      <link>/tags/tidytuesday/</link>
+      <pubDate>Tue, 07 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/tidytuesday/</guid>
       <description></description>
     </item>
     

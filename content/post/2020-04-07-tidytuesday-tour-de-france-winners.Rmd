@@ -1,0 +1,180 @@
+---
+title: '#tidytuesday: tour de france winners 🚴'
+author: Maia Pelletier
+date: '2020-04-07'
+slug: tidytuesday-tour-de-france-winners
+categories:
+  - tidytuesday
+  - r
+tags:
+  - tidytuesday
+  - data exploration
+  - r
+---
+
+```{r setup, include = FALSE, message=FALSE, warning=FALSE}
+library(kableExtra)
+source("C:/Users/maia_/Documents/R/TidyTuesday/tidytues_functions.R")
+ggplot2::theme_set(theme_maia())
+pal <- pjocolors::pjo_palettes$LightningThief
+```
+
+For this week's **#TidyTuesday**, I decided that I wanted to do an in-depth exploration of the this week's dataset of Tour de France winners, and write a blog post about how I generally go about my data exploration for Tidy Tuesday.  
+
+However, I desperately need to preface this blog post: I went into this week's **#TidyTuesday** excited to learn more about a sport I know almost nothing about. I've come out of it completely *obsessed* with the drama and insanity that is the history of the Tour de France.  
+
+I'm serious. If you know nothing about the Tour de France (like me, and probably most people), please go take a look at the [Tour de France wikipedia page](https://en.wikipedia.org/wiki/Tour_de_France). I will be peppering in some of my favourite facts that I learned about the race and its history throughout this blog post but here are some of my favourites:  
+
+- The Tour de France originated as a publicity stunt for a failing sports newspaper (*L'Auto*) in France  
+    - Apparently, setting up bike races to promote newspaper sales was a common thing in France at the time. [No I am not kidding.](https://en.wikipedia.org/wiki/Tour_de_France)
+    
+- *L'Auto* was actually a rival newspaper of the most popular sport paper in France at the time: *Le Vélo*. *L'Auto* hoped that this crazy long bike race might put *Le Vélo* out of business. 
+    - The reason they were rivals? A disagreement over whether or not an infamous French officer sold military secrets to the Germans. (Was that not your first guess?)
+    
+- Competing in the Tour de France during its origins was *crazy dangerous*. Not only did the riders cycle on **dirt roads with single-gear bikes**, the race was almost cancelled after its first year because **fans were constantly assaulting cyclists** to give their favourite the lead.   
+
+So there's your useless trivia for the week. I kind of wish this was a whole blog post about just how crazy the Tour de France is but the context makes the data as a whole more fun too.  
+
+### Data Exploration
+
+Just a quick heads up: the full code for this week's **#TidyTuesday** can be found on my (github)[https://github.com/MaiaPelletier/tidytuesday].  
+
+First things first, we have to load some useful packages, get the data, and see what it looks like.    
+
+```{r read-data, message=FALSE, warning=FALSE}
+# Load libraries
+library(tidyverse)    # All the fun tidy functions!
+library(skimr)        # Gives an awesome data summary for exploration  
+library(lubridate)    # For working with dates
+
+# Read data
+tdf_winners <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-04-07/tdf_winners.csv')
+tdf_winners
+```
+
+When I'm exploring data, sometimes I have a really hard time knowing where to start. My favourite thing to do is start at the same spot everytime and just do a simple `glimpse` and `skim` of the data.  
+
+```{r glimpse}
+glimpse(tdf_winners)
+```
+
+In this `glimpse` we can see the dimensions and the general structure of the data. This is not a very big dataset: we have 106 rows (one row for each edition of the Tour de France) and 19 columns with various information about each Tour de France winner. We can start to see that there are quite a few NA values popping up in this glimpse. I assume this is because the Tour de France originated in 1903 and there's likely no reliable record of the winners' heights, weights, etc. So this is not too problematic in terms of the data's trustworthiness.  
+
+```{r skim}
+skim(tdf_winners)
+```
+
+I found `skim` to be super helpful (and interesting) for this particular dataset, giving us lots of ideas for things that we can explore further.  
+
+Some things that I noticed from looking at the `skim` output:  
+
+- there's been 106 Tour de France editions but only 63 unique individual winners  
+- `full_name` has more missing values than `nickname`
+- in 106 editions, there have only been winners from 14 unique nationalities  
+- the distance of the tour varies quite a bit. I know that the route is different from edition to edition but a range of 5000km seems dramatic.  
+
+This is a great starting point for exploration! Let's dig into it a little more ⛏️.  
+
+### Racers with multiple TDF wins  
+
+We noticed that there were only 63 unique values for the `winner_name` variable. That means that there must be cyclists who have won multiple Tour de France editions.  
+
+```{r}
+tdf_winners %>%
+  count(winner_name, sort = TRUE) %>%
+  filter(n > 1) %>%
+  summarise(
+    num_of_racers = n_distinct(winner_name), 
+    num_of_wins = sum(n)
+    ) %>%
+  kable() %>%
+  kable_styling()
+```
+
+So half of the editions in all Tour de France history were won by just 21 cyclists! That's a pretty cool. Who were these cyclists and how many times did they win individually?  
+
+```{r}
+tdf_winners %>%
+  count(winner_name, name = 'num_of_wins') %>%
+  filter(num_of_wins > 1) %>%
+  ggplot(aes(reorder(winner_name, num_of_wins), num_of_wins)) +
+  geom_col(fill = pal[1],
+           width = 0.6,
+           alpha = 0.8) +
+  labs(x = NULL, y = 'Tour de France wins') +
+  coord_flip()
+```
+
+Personally, I am only familiar with the top guy (as I'm sure most people are), but it's pretty cool to see just how many cyclists that were not just able to win this race once, but *more than once*. That's an amazing feat of human strength and endurance (and steroids...? :eyes:).  
+
+In my wikipedia spiral, I learned that Eddy Merckx was a pretty big deal in the 70s. He was the first "superstar" of the Tour de France and his aggressive style earned him the nickname "The Cannibal". *(Side note: Cycling is way more intense than I ever could have imagined)*  
+
+### Nations that have a Tour de France winner   
+
+Another thing we noticed was that only 14 countries can claim competitors who have won an edition of the Tour de France.    
+
+```{r}
+tdf_winners %>%
+  count(nationality, sort = TRUE) %>%
+  ggplot(aes(reorder(nationality, n), n)) +
+  geom_col(fill = pal[2], alpha = 0.8, width = 0.6) +
+  labs(x = NULL, y = 'Tour de France wins') +
+  coord_flip()
+```
+
+It's not surprising that France has won so many editions of the Tour. The race originated there and although it was open for global competitors for most of its editions, it was the most popular in France (and neighbouring countries) for most of the 20th century. This meant that there were more cyclists who were racing from western European countries than anywhere else. In fact the only countries who have won outside of "Europe" (*sorry Brexit*) are: **USA**, **Colombia**, and **Australia**.   
+
+### Race distances  
+
+We noticed before the huge variability of the race distances. To me, this didn't make a lot of sense. I expected a bit of variability since the route changes from edition to edition but variance of the range of distances travelled over the years is **very wide**.  
+
+```{r}
+ggplot(tdf_winners, aes(distance)) +
+  geom_histogram(fill = pal[3], binwidth = 200, alpha = 0.8) +
+  labs(x = 'Race distance (km)', y = 'Frequency')
+```
+
+How can the race distance differ from low 3000s km to almost 6000km? After looking into the history, I decided to plot the distances raced over the years.  
+
+```{r, include=FALSE}
+min_max_dist <- bind_rows(
+  
+  tdf_winners %>%
+  mutate(start_year = year(start_date)) %>%
+  top_n(1, distance),
+  
+  max_dist <- tdf_winners %>%
+  mutate(start_year = year(start_date)) %>%
+  filter(start_year > 1905) %>%
+  top_n(-1, distance)
+)
+```
+
+```{r}
+tdf_winners %>%
+  mutate(start_year = year(start_date)) %>%
+  ggplot(aes(start_year, distance)) +
+  geom_line(col = pal[4]) +
+  geom_point(data = min_max_dist,
+             aes(start_year, distance),
+             col = 'grey35') +
+  geom_text(data = min_max_dist,
+            aes(label = start_year),
+            size = 3,
+            color = 'grey25',
+            hjust = -0.25,
+            family = 'Arial Narrow') +
+  labs(x = 'Race year', y = 'Race distance (km)')
+```
+
+We can see that since the race's origins, the race distance seems to be on a bit of a decline. Not considering the first year of the race in 1903, the minimum distance raced was 3272km (*which is still crazy*). The maximum distance raced clocks in at a whopping 5745km during the 1926 edition of the Tour (*which is actual insanity???*). If you're wondering why the distances are so insanely high during the early 1900s, it lies (once again) within the history of the Tour de France.  
+
+The original organizer of the race was a strict traditionalist and wanted the race to be the **ultimate test of endurance**, stating that the ideal race had only **ONE** rider making it to the finish line (omg). He also demanded that riders mend their bicycles *without* help and that they use the *same bicycle from start to end*. Exchanging a damaged bicycle for another was not allowed under his rules (OMG).  
+
+So, in conclusion... The Tour de France is crazy.  
+
+Actually though, I haven't even touched the doping scandals that have plagued the race since the 1960s or the fact that the race was never really standardized until the 80s *or* the fact that it remained a newspaper feud for 40 years after its origin. Everything about the race is wild.  
+
+This is an awesome **#TidyTuesday** dataset and there's still so much more to explore past what I've looked at here. I think this dataset is a great example of how context (or *domain expertise* as it's called in the data science world) is pretty important to understanding your data (and a great illustration of the joy of learning new things).  
+
+Any question/comments/fun facts about the Tour de France can be directed to [my twitter](https://twitter.com/MaiaPelleter). Reminder that you can find my full code for this week's Tidy Tuesday on [github](https://github.com/MaiaPelletier). Happy **#TidyTuesday** everyone!  

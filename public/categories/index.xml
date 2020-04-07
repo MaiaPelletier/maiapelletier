@@ -20,5 +20,23 @@
       <description></description>
     </item>
     
+    <item>
+      <title>r</title>
+      <link>/categories/r/</link>
+      <pubDate>Tue, 07 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>tidytuesday</title>
+      <link>/categories/tidytuesday/</link>
+      <pubDate>Tue, 07 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/tidytuesday/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>
