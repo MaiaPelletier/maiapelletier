@@ -37,7 +37,7 @@ So there's your useless trivia for the week. I kind of wish this was a whole blo
 
 ### Data Exploration
 
-Just a quick heads up: the full code for this week's **#TidyTuesday** can be found on my (github)[https://github.com/MaiaPelletier/tidytuesday].  
+Just a quick heads up: the full code for this week's **#TidyTuesday** can be found on my [github](https://github.com/MaiaPelletier/tidytuesday).  
 
 First things first, we have to load some useful packages, get the data, and see what it looks like.    
 
