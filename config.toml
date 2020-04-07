@@ -1,5 +1,5 @@
 # Site settings
-baseurl = "your_site_url_address"
+baseurl = "https://maiapelletier.netlify.com/"
 languageCode = "en"
 title = "Maia Pelletier"
 theme = "hugo-theme-cactus-plus"
