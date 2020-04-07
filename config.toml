@@ -1,16 +1,17 @@
 # Site settings
-baseurl = "https://maiapelletier.netlify.com/"
+baseurl = "http://maiapelletier.rbind.io/"
 languageCode = "en"
 title = "Maia Pelletier"
 theme = "hugo-theme-cactus-plus"
 googleAnalytics = ""
 # Set the value to true if your site include CJK (Chinese, Japanese, and Korean languages) characters
 hasCJKLanguage = false
+enableEmoji = true
 
 [params]
 	author = "Maia Pelletier"
 	description = ""
-	bio = ""
+	bio = "R & data & etc."
 
 	twitter = "@MaiaPelletier"
 
