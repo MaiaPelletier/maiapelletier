@@ -105,7 +105,7 @@ tdf_winners %>%
   coord_flip()
 ```
 
-Personally, I am only familiar with the top guy (as I'm sure most people are), but it's pretty cool to see just how many cyclists that were not just able to win this race once, but *more than once*. That's an amazing feat of human strength and endurance (and steroids...? :eyes:).  
+Personally, I am only familiar with the top guy (as I'm sure most people are), but it's pretty cool to see just how many cyclists that were not just able to win this race once, but *more than once*. That's an amazing feat of human strength and endurance (and drugs...? :eyes:).  
 
 In my wikipedia spiral, I learned that Eddy Merckx was a pretty big deal in the 70s. He was the first "superstar" of the Tour de France and his aggressive style earned him the nickname "The Cannibal". *(Side note: Cycling is way more intense than I ever could have imagined)*  
 
