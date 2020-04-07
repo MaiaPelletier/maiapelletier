@@ -1,0 +1,18 @@
+---
+title: a quick hello
+author: Maia Pelletier
+date: '2020-04-07'
+slug: a-quick-hello
+categories:
+  - personal
+tags:
+  - personal
+---
+
+After more dedicated hours than I would like to admit, my website is finally up and running! A huge thank you to the `blogdown` package which made this process as painless as possible. I have been lining up ideas for blogposts for a year, I'm glad I finally found the time to create the site to host them all. I've always had a love of writing, so transitioning those skills to my personal website should be lots of fun.  
+
+I am super excited to use this website to share my various thoughts, ideas, opinions, and projects with the amazing **#rstats** community. I've really delved into R this last year and it's been such a fun journey. I'm hoping to use this website to track my learning progress and share a little bit about myself in the process.  
+
+Feel free to connect with me on [Twitter](http://twitter.com/MaiaPelletier) to get to know me a little better.  
+
+My name exists on a website now! So cool!  
