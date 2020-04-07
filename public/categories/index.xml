@@ -20,23 +20,5 @@
       <description></description>
     </item>
     
-    <item>
-      <title>test</title>
-      <link>/categories/test/</link>
-      <pubDate>Tue, 07 Apr 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/test/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>R</title>
-      <link>/categories/r/</link>
-      <pubDate>Thu, 23 Jul 2015 21:13:14 -0500</pubDate>
-      
-      <guid>/categories/r/</guid>
-      <description></description>
-    </item>
-    
   </channel>
 </rss>
