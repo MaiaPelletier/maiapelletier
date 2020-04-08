@@ -23,7 +23,7 @@ For this week's **#TidyTuesday**, I decided that I wanted to do an in-depth expl
 
 However, I desperately need to preface this blog post: I went into this week's **#TidyTuesday** excited to learn more about a sport I know almost nothing about. I've come out of it completely *obsessed* with the drama and insanity that is the history of the Tour de France.  
 
-I'm serious. If you know nothing about the Tour de France (like me, and probably most people), please go take a look at the [Tour de France wikipedia page](https://en.wikipedia.org/wiki/Tour_de_France). I will be peppering in some of my favourite facts that I learned about the race and its history throughout this blog post but here are some of my favourites:  
+I'm serious. If you know nothing about the Tour de France (like me, and probably most people), please go take a look at the [Tour de France wikipedia page](https://en.wikipedia.org/wiki/Tour_de_France). I will be peppering in some of my favourite facts that I learned about the race and its history throughout this blog post but here are some of the best (in my opinion):  
 
 - The Tour de France originated as a publicity stunt for a failing sports newspaper (*L'Auto*) in France  
     - Apparently, setting up bike races to promote newspaper sales was a common thing in France at the time. [No I am not kidding.](https://en.wikipedia.org/wiki/Tour_de_France)
