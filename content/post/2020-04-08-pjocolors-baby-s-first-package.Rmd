@@ -1,0 +1,203 @@
+---
+title: "pjocolors: baby's first package \U0001F4E6"
+author: Maia Pelletier
+date: '2020-04-08'
+slug: pjocolors-baby-s-first-package
+categories:
+  - r
+tags:
+  - packages
+  - r
+---
+```{r, include=FALSE}
+theme_maia <- function() {
+  
+  library(ggplot2)
+  
+  extrafont::loadfonts(device = 'win', quiet = TRUE)
+  
+  ggthemes::theme_foundation(base_size = 12, base_family = 'Arial Narrow') +
+    theme(
+      rect = element_rect(fill = '#F0F0F0',
+                          linetype = 0, 
+                          colour = NA),
+      text = element_text(color = 'grey 25'),
+      panel.grid = element_blank(),
+      plot.title = element_text(size = 18,
+                                face = 'bold',
+                                hjust = 0),
+      plot.subtitle = element_text(size = 14),
+      plot.caption = element_text(family = 'sans',
+                                  face = 'italic', 
+                                  size = 8, 
+                                  color = 'grey65'),
+      plot.margin = unit(c(1, 1, 1, 1), "lines"),
+      strip.text = element_text(size = 11),
+      strip.background = element_rect(),
+      axis.ticks = element_blank(),
+      axis.title = element_text(size = 11, color = 'grey50'),
+      axis.text = element_text(size = 8),
+      legend.background = element_rect(),
+      legend.position = "top",
+      legend.direction = "horizontal",
+      legend.box = "vertical",
+      legend.key.height = unit(2, 'mm'),
+      legend.text = element_text(size = 6),
+      legend.title = element_text(family = 'Arial Narrow', 
+                                  size = 7, 
+                                  vjust = 1)
+    )
+  
+}
+
+ggplot2::theme_set(theme_maia())
+library(tidyverse)
+library(patchwork)
+```
+
+About a 2 weeks ago, I [tweeted out](https://twitter.com/MaiaPelletier/status/1244984817206337537) that I had released my first package [pjocolors](https://github.com/MaiaPelletier/pjocolours), which contains 5 colour palettes based on the (original) book covers of *Percy Jackson and the Olympians* by Rick Riordan. Today I released the first update, complete with **updated palettes** and **new functions** for use with `ggplot2`:bar_chart:!  
+
+I decided to develop this simple package, not so much for utility purposes (although I've used it in two **#TidyTuesday**'s now!) or out of sheer nerdiness and nostalgia (although that did play a part as well :smile:), but because I have been curious about package development for a while. So I figured: *what better time to learn than **quarantine**? * 
+
+![](/images/bookcovers.jpg)  
+
+## The process  
+
+I was inspired to develop a colour palette package for a few reasons.  
+
+- I had just re-read the Lightning Thief :zap:.    
+- I'm a sucker for a pretty colour palette :art:.   
+- It seemed like a simple place to start discovering the world of package development.     
+- I had recently become obsessed with a couple different colour palette packages (which I use *constantly*): [fishualize](https://nschiett.github.io/fishualize/index.html) and [nationalparkcolors](https://github.com/katiejolly/nationalparkcolors).  
+
+I have a lot of **thanks** and praise to give to these two packages. They've provided me with some beautiful palettes that I've used in various graphics and I've crawled through their code a few times over to help me understand how colour palette packages are set-up.  
+
+I still have a lot to learn about developing packages, but I have to say that this was a great little exercise! I'm so grateful that the `devtools` package exists, it made the whole process so painless.  
+
+Some great resources that I consulted to learn about the basics of writing packages were  
+
+- [R package primer](https://kbroman.org/pkg_primer/) by Karl Broman  
+- [Writing an R package from scratch](https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/) by Hilary Parker  
+- [Making Your First R Package](https://tinyheero.github.io/jekyll/update/2015/07/26/making-your-first-R-package.html) by Fong Chun Chan  
+- [R packages](http://r-pkgs.had.co.nz/) by Hadley Wickham (of course).    
+
+I highly recommend these resources if you're looking to learn the basics of R packages too. All in all, I would say getting a handle of the basics (but just the basics) took me less than a day (thanks to these great writers).  
+
+These last couple weeks, I've spent a lot of time on *#rstats* twitter and reading other R blogger's posts. My eyes have opened to R development and I'm definitely cultivating a rising interest in the topic. I'm already working on turning `pjocolors` into a *real* package that other people would want to use (and not just my little pet project). I'm excited to dive into it more as quarantine drags on and see what comes out of it 👩
+🔧.  
+
+## A bit about pjocolors  
+
+pjocolors v0.1.1 contains _6 colour palettes_. Currently all palettes only contain 5 colours (however I hope to expand this in the future). The palette options can be accessed as follows:  
+
+```{r palette-options}
+library(pjocolors)
+names(pjo_palettes)
+```
+
+
+#### Available palettes  
+
+![](/post/2020-04-08-pjocolors-baby-s-first-package_files/LightningThief.png){width=30%}![](/post/2020-04-08-pjocolors-baby-s-first-package_files/SeaOfMonsters.png){width=30%}![](/post/2020-04-08-pjocolors-baby-s-first-package_files/TitansCurse.png){width=30%}![](/post/2020-04-08-pjocolors-baby-s-first-package_files/BatOfTheLabyrinth.png){width=30%}![](/post/2020-04-08-pjocolors-baby-s-first-package_files/LastOlympian.png){width=30%}![](/post/2020-04-08-pjocolors-baby-s-first-package_files/LastOlympian2.png){width=30%}
+
+#### Use  
+
+To illustrate how to use the palettes, I downloaded some cool data on library check-outs of Percy Jackson related materials from the [Checkouts by Title](https://data.seattle.gov/Community/Checkouts-by-Title/tmmm-ytt6/data) database from the awesome *City of Seattle Open Data Portal*.  
+
+```{r, message=FALSE}
+# Read in data (which I downloaded from the database)
+pjo_checkouts <- read_csv('percyjacksoncheckouts.csv')
+```
+I'll use this data to create a couple plots and apply some of the `pjo_palettes` to them by using `scale_color_pjo` and `scale_fill_pjo`.  
+
+##### Discrete Scale  
+
+Good palettes to use for discrete scales: **LightningThief**, **TitansCurse**, **BatOfTheLabyrinth**, **LastOlympian.**    
+
+```{R, include = FALSE}
+# Tidy data
+pjo_checkouts <- 
+  pjo_checkouts %>%
+  # No one is ever interested in the Percy Jackson movie
+  # So we're going to filter those out
+  filter(!MaterialType %in% c('VIDEODISC', 'VIDEOCASS')) %>% 
+  group_by(CheckoutYear, MaterialType) %>%
+  # Summarise to get the total number of checkouts each year by Material Type
+  summarise(checkouts = sum(Checkouts)) %>%
+  ungroup() %>%
+  mutate(MaterialType = str_to_sentence(MaterialType))
+```
+
+```{r make-plots, fig.height=3}
+# Make plots
+p1 <- 
+  pjo_checkouts %>% 
+  ggplot(aes(CheckoutYear, checkouts, color = MaterialType)) +
+  geom_line(size = 1) +
+  labs(x = 'Year', y = 'Number of checkouts') +
+  guides(colour = guide_legend(""))
+
+p2 <- 
+  pjo_checkouts %>%
+  ggplot(aes(reorder(MaterialType, -checkouts), checkouts)) +
+  geom_col(aes(fill = MaterialType), show.legend = FALSE, 
+           alpha = 0.8, width = 0.65) +
+  labs(x = NULL, y = 'Number of checkouts')
+
+# Apply pjocolors (default = LightningThief)
+p1 + scale_color_pjo()
+# Apply pjocolors (BatOfTheLabyrinth)
+p2 + scale_fill_pjo(palette = 'BatOfTheLabyrinth')
+```
+
+##### Continuous Scale  
+
+Good palettes to use for continuous scales: **LightningThief** (diverging scales), **SeaOfMonsters** (sequential scales), **LastOlympian2** (sequential scales).      
+
+```{r, include=FALSE}
+pjo_checkouts <- read_csv('percyjacksoncheckouts.csv')
+
+# Tidy data
+pjo_checkouts <- 
+  pjo_checkouts %>%
+  filter(!MaterialType %in% c('VIDEODISC', 'VIDEOCASS')) %>% 
+  group_by(CheckoutYear, CheckoutMonth, MaterialType) %>%
+  # Summarise to get the total number of checkouts each year by Material Type
+  summarise(checkouts = sum(Checkouts)) %>%
+  ungroup() %>%
+  mutate(MaterialType = str_to_sentence(MaterialType))
+```
+
+```{r, fig.height=3}
+p3 <- 
+  pjo_checkouts %>%
+  ggplot(aes(CheckoutMonth, checkouts, group = CheckoutMonth)) +
+  geom_point(aes(color = checkouts), alpha = 0.65) +
+  labs(x = NULL, y = 'Checkouts') +
+  scale_x_continuous(labels = month.abb, breaks = 1:12) +
+  guides(color = guide_colorbar(title = 'Number of checkouts'))
+
+# Apply pjocolors (SeaOfMonsters)
+p3 + scale_color_pjo(palette = 'SeaOfMonsters', discrete = FALSE)
+```
+
+##### A Note about base graphics  
+
+These colour palettes are able to be used for base graphics too! Rather than using the `scale_color_pjo` function, one could also just construct a palette as follows  
+
+```{r}
+# A palette with 
+pal <- pjo_palettes$TitansCurse
+```
+
+## Future plans for pjocolors  
+
+The ideal is for this package to be a well-documented, general-use colour palette package. What this means to me right now is:  
+
+- Accessibility! I want to make sure I have some colourblind-safe options.
+- Expanding the numbers of colours in some of the palettes.  
+- Expanding colour palette options (There's more books to add!).  
+- Updating the colour palettes to make sure they adhere to general colour rules (aka they look as nice as possible).   
+
+Of course I'm open to any and all ideas on how this little package of mine could be improved, so feel free to tweet at me @[MaiaPelletier](https://twitter.com/MaiaPelletier) if you have any ideas for me :brain:.  
+

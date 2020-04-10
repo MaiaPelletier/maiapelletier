@@ -6,10 +6,20 @@
     <description>Recent content in r on Maia Pelletier</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 07 Apr 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 08 Apr 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>pjocolors: baby&#39;s first package 📦</title>
+      <link>/post/pjocolors-baby-s-first-package/</link>
+      <pubDate>Wed, 08 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/pjocolors-baby-s-first-package/</guid>
+      <description>About a 2 weeks ago, I tweeted out that I had released my first package pjocolors, which contains 5 colour palettes based on the (original) book covers of Percy Jackson and the Olympians by Rick Riordan. Today I released the first update, complete with updated palettes and new functions for use with ggplot2📊!
+I decided to develop this simple package, not so much for utility purposes (although I’ve used it in two #TidyTuesday’s now!</description>
+    </item>
     
     <item>
       <title>#tidytuesday: tour de france winners 🚴</title>

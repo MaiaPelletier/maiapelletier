@@ -1,0 +1,123 @@
+---
+title: "pjocolors: baby's first package \U0001F4E6"
+author: Maia Pelletier
+date: '2020-04-08'
+slug: pjocolors-baby-s-first-package
+categories:
+  - r
+tags:
+  - packages
+  - r
+---
+
+
+
+<p>About a 2 weeks ago, I <a href="https://twitter.com/MaiaPelletier/status/1244984817206337537">tweeted out</a> that I had released my first package <a href="https://github.com/MaiaPelletier/pjocolours">pjocolors</a>, which contains 5 colour palettes based on the (original) book covers of <em>Percy Jackson and the Olympians</em> by Rick Riordan. Today I released the first update, complete with <strong>updated palettes</strong> and <strong>new functions</strong> for use with <code>ggplot2</code>:bar_chart:!</p>
+<p>I decided to develop this simple package, not so much for utility purposes (although I’ve used it in two <strong>#TidyTuesday</strong>’s now!) or out of sheer nerdiness and nostalgia (although that did play a part as well :smile:), but because I have been curious about package development for a while. So I figured: <em>what better time to learn than <strong>quarantine</strong>? </em></p>
+<p><img src="/images/bookcovers.jpg" /></p>
+<div id="the-process" class="section level2">
+<h2>The process</h2>
+<p>I was inspired to develop a colour palette package for a few reasons.</p>
+<ul>
+<li>I had just re-read the Lightning Thief :zap:.<br />
+</li>
+<li>I’m a sucker for a pretty colour palette :art:.<br />
+</li>
+<li>It seemed like a simple place to start discovering the world of package development.<br />
+</li>
+<li>I had recently become obsessed with a couple different colour palette packages (which I use <em>constantly</em>): <a href="https://nschiett.github.io/fishualize/index.html">fishualize</a> and <a href="https://github.com/katiejolly/nationalparkcolors">nationalparkcolors</a>.</li>
+</ul>
+<p>I have a lot of <strong>thanks</strong> and praise to give to these two packages. They’ve provided me with some beautiful palettes that I’ve used in various graphics and I’ve crawled through their code a few times over to help me understand how colour palette packages are set-up.</p>
+<p>I still have a lot to learn about developing packages, but I have to say that this was a great little exercise! I’m so grateful that the <code>devtools</code> package exists, it made the whole process so painless.</p>
+<p>Some great resources that I consulted to learn about the basics of writing packages were</p>
+<ul>
+<li><a href="https://kbroman.org/pkg_primer/">R package primer</a> by Karl Broman<br />
+</li>
+<li><a href="https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/">Writing an R package from scratch</a> by Hilary Parker<br />
+</li>
+<li><a href="https://tinyheero.github.io/jekyll/update/2015/07/26/making-your-first-R-package.html">Making Your First R Package</a> by Fong Chun Chan<br />
+</li>
+<li><a href="http://r-pkgs.had.co.nz/">R packages</a> by Hadley Wickham (of course).</li>
+</ul>
+<p>I highly recommend these resources if you’re looking to learn the basics of R packages too. All in all, I would say getting a handle of the basics (but just the basics) took me less than a day (thanks to these great writers).</p>
+<p>These last couple weeks, I’ve spent a lot of time on <em>#rstats</em> twitter and reading other R blogger’s posts. My eyes have opened to R development and I’m definitely cultivating a rising interest in the topic. I’m already working on turning <code>pjocolors</code> into a <em>real</em> package that other people would want to use (and not just my little pet project). I’m excited to dive into it more as quarantine drags on and see what comes out of it 👩
+🔧.</p>
+</div>
+<div id="a-bit-about-pjocolors" class="section level2">
+<h2>A bit about pjocolors</h2>
+<p>pjocolors v0.1.1 contains <em>6 colour palettes</em>. Currently all palettes only contain 5 colours (however I hope to expand this in the future). The palette options can be accessed as follows:</p>
+<pre class="r"><code>library(pjocolors)
+names(pjo_palettes)</code></pre>
+<pre><code>## [1] &quot;LightningThief&quot;    &quot;SeaOfMonsters&quot;     &quot;TitansCurse&quot;      
+## [4] &quot;BatOfTheLabyrinth&quot; &quot;LastOlympian&quot;      &quot;LastOlympian2&quot;</code></pre>
+<div id="available-palettes" class="section level4">
+<h4>Available palettes</h4>
+<p><img src="/post/2020-04-08-pjocolors-baby-s-first-package_files/LightningThief.png" style="width:30.0%" /><img src="/post/2020-04-08-pjocolors-baby-s-first-package_files/SeaOfMonsters.png" style="width:30.0%" /><img src="/post/2020-04-08-pjocolors-baby-s-first-package_files/TitansCurse.png" style="width:30.0%" /><img src="/post/2020-04-08-pjocolors-baby-s-first-package_files/BatOfTheLabyrinth.png" style="width:30.0%" /><img src="/post/2020-04-08-pjocolors-baby-s-first-package_files/LastOlympian.png" style="width:30.0%" /><img src="/post/2020-04-08-pjocolors-baby-s-first-package_files/LastOlympian2.png" style="width:30.0%" /></p>
+</div>
+<div id="use" class="section level4">
+<h4>Use</h4>
+<p>To illustrate how to use the palettes, I downloaded some cool data on library check-outs of Percy Jackson related materials from the <a href="https://data.seattle.gov/Community/Checkouts-by-Title/tmmm-ytt6/data">Checkouts by Title</a> database from the awesome <em>City of Seattle Open Data Portal</em>.</p>
+<pre class="r"><code># Read in data (which I downloaded from the database)
+pjo_checkouts &lt;- read_csv(&#39;percyjacksoncheckouts.csv&#39;)</code></pre>
+<p>I’ll use this data to create a couple plots and apply some of the <code>pjo_palettes</code> to them by using <code>scale_color_pjo</code> and <code>scale_fill_pjo</code>.</p>
+<div id="discrete-scale" class="section level5">
+<h5>Discrete Scale</h5>
+<p>Good palettes to use for discrete scales: <strong>LightningThief</strong>, <strong>TitansCurse</strong>, <strong>BatOfTheLabyrinth</strong>, <strong>LastOlympian.</strong></p>
+<pre class="r"><code># Make plots
+p1 &lt;- 
+  pjo_checkouts %&gt;% 
+  ggplot(aes(CheckoutYear, checkouts, color = MaterialType)) +
+  geom_line(size = 1) +
+  labs(x = &#39;Year&#39;, y = &#39;Number of checkouts&#39;) +
+  guides(colour = guide_legend(&quot;&quot;))
+
+p2 &lt;- 
+  pjo_checkouts %&gt;%
+  ggplot(aes(reorder(MaterialType, -checkouts), checkouts)) +
+  geom_col(aes(fill = MaterialType), show.legend = FALSE, 
+           alpha = 0.8, width = 0.65) +
+  labs(x = NULL, y = &#39;Number of checkouts&#39;)
+
+# Apply pjocolors (default = LightningThief)
+p1 + scale_color_pjo()</code></pre>
+<p><img src="/post/2020-04-08-pjocolors-baby-s-first-package_files/figure-html/make-plots-1.png" width="672" /></p>
+<pre class="r"><code># Apply pjocolors (BatOfTheLabyrinth)
+p2 + scale_fill_pjo(palette = &#39;BatOfTheLabyrinth&#39;)</code></pre>
+<p><img src="/post/2020-04-08-pjocolors-baby-s-first-package_files/figure-html/make-plots-2.png" width="672" /></p>
+</div>
+<div id="continuous-scale" class="section level5">
+<h5>Continuous Scale</h5>
+<p>Good palettes to use for continuous scales: <strong>LightningThief</strong> (diverging scales), <strong>SeaOfMonsters</strong> (sequential scales), <strong>LastOlympian2</strong> (sequential scales).</p>
+<pre class="r"><code>p3 &lt;- 
+  pjo_checkouts %&gt;%
+  ggplot(aes(CheckoutMonth, checkouts, group = CheckoutMonth)) +
+  geom_point(aes(color = checkouts), alpha = 0.65) +
+  labs(x = NULL, y = &#39;Checkouts&#39;) +
+  scale_x_continuous(labels = month.abb, breaks = 1:12) +
+  guides(color = guide_colorbar(title = &#39;Number of checkouts&#39;))
+
+# Apply pjocolors (SeaOfMonsters)
+p3 + scale_color_pjo(palette = &#39;SeaOfMonsters&#39;, discrete = FALSE)</code></pre>
+<p><img src="/post/2020-04-08-pjocolors-baby-s-first-package_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="a-note-about-base-graphics" class="section level5">
+<h5>A Note about base graphics</h5>
+<p>These colour palettes are able to be used for base graphics too! Rather than using the <code>scale_color_pjo</code> function, one could also just construct a palette as follows</p>
+<pre class="r"><code># A palette with 
+pal &lt;- pjo_palettes$TitansCurse</code></pre>
+</div>
+</div>
+</div>
+<div id="future-plans-for-pjocolors" class="section level2">
+<h2>Future plans for pjocolors</h2>
+<p>The ideal is for this package to be a well-documented, general-use colour palette package. What this means to me right now is:</p>
+<ul>
+<li>Accessibility! I want to make sure I have some colourblind-safe options.</li>
+<li>Expanding the numbers of colours in some of the palettes.<br />
+</li>
+<li>Expanding colour palette options (There’s more books to add!).<br />
+</li>
+<li>Updating the colour palettes to make sure they adhere to general colour rules (aka they look as nice as possible).</li>
+</ul>
+<p>Of course I’m open to any and all ideas on how this little package of mine could be improved, so feel free to tweet at me @<a href="https://twitter.com/MaiaPelletier">MaiaPelletier</a> if you have any ideas for me :brain:.</p>
+</div>
