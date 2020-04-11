@@ -1,7 +1,7 @@
 ---
 title: "pjocolors: baby's first package \U0001F4E6"
 author: Maia Pelletier
-date: '2020-04-08'
+date: '2020-04-11'
 slug: pjocolors-baby-s-first-package
 categories:
   - r
@@ -186,7 +186,7 @@ p3 + scale_color_pjo(palette = 'SeaOfMonsters', discrete = FALSE)
 These colour palettes are able to be used for base graphics too! Rather than using the `scale_color_pjo` function, one could also just construct a palette as follows  
 
 ```{r}
-# A palette with 
+# A palette for base graphics
 pal <- pjo_palettes$TitansCurse
 ```
 
