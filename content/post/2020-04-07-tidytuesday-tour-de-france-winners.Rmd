@@ -177,4 +177,4 @@ Actually though, I haven't even touched the doping scandals that have plagued th
 
 This is an awesome **#TidyTuesday** dataset and there's still so much more to explore past what I've looked at here. I think this dataset is a great example of how context (or *domain expertise* as it's called in the data science world) is pretty important to understanding your data (and a great illustration of the joy of learning new things).  
 
-Any question/comments/fun facts about the Tour de France can be directed to [my twitter](https://twitter.com/MaiaPelleter). Reminder that you can find my full code for this week's Tidy Tuesday on [github](https://github.com/MaiaPelletier). Happy **#TidyTuesday** everyone! :relaxed:  
+Any question/comments/fun facts about the Tour de France can be directed to [my twitter](https://twitter.com/MaiaPelletier). Reminder that you can find my full code for this week's Tidy Tuesday on [github](https://github.com/MaiaPelletier/tidytuesday). Happy **#TidyTuesday** everyone! :relaxed:  
