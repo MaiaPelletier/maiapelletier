@@ -20,8 +20,8 @@ you can expect to see a lot of **r blogging** here, but also some posts regardin
 
 #### elsewhere.
 
-you can find me in these other spots on the internet (or contact me at maia.pelletier15@gmail.com)
+you can find me in these other spots on the internet  
 
-- [twitter]("https://twitter.com/MaiaPelleter")
-- [github]("https://github.com/MaiaPelletier")
-- [linkedin]("https://www.linkedin.com/in/maia-pelletier/")
+- [twitter](https://twitter.com/MaiaPelletier)
+- [github](https://github.com/MaiaPelletier)
+- [linkedin](https://www.linkedin.com/in/maia-pelletier/)
