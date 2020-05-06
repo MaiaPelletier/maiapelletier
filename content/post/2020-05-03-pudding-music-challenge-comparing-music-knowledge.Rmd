@@ -50,7 +50,8 @@ pudding_data <-
   mutate(knowledge = fct_inorder(knowledge))
 
 pudding_data %>%
-  sample_n(10) %>%
+  group_by(name) %>% 
+  sample_n(5) %>%
   kable() %>%
   kable_styling()
 ```
