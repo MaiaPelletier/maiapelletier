@@ -59,7 +59,7 @@ If you're interested in how I got this data, I copy+pasted our results from the 
 
 There were 4 knowledge levels to choose from in the Pudding quiz: **`r knowledge_labels[1:3]`** and **`r knowledge_labels[4]`**.    
 
-*Note*: I will be referencing my bf as "J" and me as "M" in all the plot legends.   
+*Note*: I will be referencing my bf as "J" and me as "M" going forward.     
 
 Overall, how many songs did we get right?  
 
@@ -74,9 +74,9 @@ pudding_data %>%
   kable_styling()
 ```
 
-Yikes... *Overall* we more or less failed. But since we belong to the youngest generation accounted for in this generational analysis, that can't be too surprising.  
+Yikes... *Overall* we failed. But since we belong to the youngest generation accounted for in this generational analysis, that can't be too surprising?    
 
-But I'm not here to prove my unbeatable musical expertise. I'm only here to prove that I know more music than J and so far, we're on the right track - Overall, I knew 10% more songs than J.  
+But I'm not here to prove my unbeatable musical expertise. I'm only here to prove that I know more music than J and so far, we're on the right track - Overall, I knew 10% more songs than J:information_desk_person:.  
 
 I used `ggbeeswarm` to visualize the results of all the songs we tested ourselves on. Where did we do better/worse? Do our results mirror each other's or do they vastly differ?  
 
@@ -109,11 +109,11 @@ p +
 ```
 
 
-- At a quick glance, our results look like they are fairly similar (as you would expect of 2 people born in the same year).  
+- At a quick glance, our results look fairly similar (as you would expect of 2 people born in the same year).  
 
 - You can see there's an immediate increase in music recognition in the 2000s where we started to actually recognize the music we grew up with.     
 
-- In general, it looks like J's "**don't know it**" is more saturated than mine. This *could* mean that I know more music :smirk:. However, where I listened to probably around ~30 seconds of each song, he was quick to click "**don't know it**" after about 10 seconds, so this could also mean he missed parts of a song that he might have recognized.  
+- In general, it looks like J's "**don't know it**" is more saturated than mine. This could mean that I know more music overall and get bragging rights. However, where I listened to probably around ~30 seconds of each song, he was quick to click "**don't know it**" after about 10 seconds, so this could also mean he missed parts of a song that he might have recognized.  
 
 - There was a lot of stuff that sounded familiar to me but I couldn't quite place, especially in the 1980s-1990s.  
 
@@ -121,7 +121,7 @@ p +
 
 - I think I was more liberal with the **singing the lyrics** option since to me generally *knowing a song* = *knowing the lyrics*. Considering that, J and I had pretty similar knowledge of the 2000s and 2010s.  
 
-I was curious to see what music we knew from decade to decade (aka which decades can I boast more music knowledge than J), so I aggregated the "know it"s and the "singing it"s to visualize this.  
+I was curious to see the music that we knew from decade to decade (aka which decades can I boast more music knowledge than J), so I aggregated the "know it"s and the "singing it"s to visualize this.  
 
 ```{r}
 decade_knowledge <- 
@@ -151,13 +151,13 @@ decade_knowledge %>%
         legend.key.width = unit(2, 'mm'))
 ```
 
-- J is not at all familiar with the music in the 90s, only recognizing <15% of songs. This is a little surprising but also understandable I guess since we were born in the mid-late 90s.  
+- J is not at all familiar with the hit music of the 90s, only recognizing <15% of songs. This is a little surprising but also understandable I guess since we were born in the mid-late 90s.  
 
 - I did surprisingly ok in the 60s (recognizing over 50% of songs!). Definitely not *well* 😅, but I was expecting that to be my worst decade. It turned out that I recognized the least music from the 70s (also a bit surprising to me, I thought the 70s would be my best decade pre-2000).  
 
-The only category where J came close to beating me was in the 70s, where we tied. So all in all, I think I get to pretty decisively take the win in all the decades otherwise!:trophy:   
+The only category where J came close to beating me was in the 70s, where we tied. So all in all, I think I get to pretty decisively take the win in all the decades otherwise (and bragging rights overall)!:trophy:   
 
-This was super fun to work on so thanks again to Namita for the awesome tweet+idea :smile:. For any questions, comments, admonishments of my lacking music knowledge, etc, you can find me on twitter [here](https://twitter.com/MaiaPelletier).  
+This was super fun to work on so thanks again to [Namita](https://twitter.com/nnstats) for the awesome tweet+idea :smile:. For any questions, comments, admonishments of my lacking music knowledge, etc, you can find me on twitter [here](https://twitter.com/MaiaPelletier).  
 
 
 
